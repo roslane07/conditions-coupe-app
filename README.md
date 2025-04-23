@@ -32,7 +32,7 @@ Cette application permet de **calculer automatiquement les conditions de coupe**
 ## 🚀 Lancement local
 
 ```bash
-git clone https://github.com/<TON_UTILISATEUR>/conditions-coupe-app.git
+git clone https://github.com/<roslane07>/conditions-coupe-app.git
 cd conditions-coupe-app
 pip install -r requirements.txt
 streamlit run app.py
