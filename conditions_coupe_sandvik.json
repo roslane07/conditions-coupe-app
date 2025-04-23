@@ -1,0 +1,80 @@
+{
+    "CCGX 12 04 08-AL H10": {
+        "operation": "chariotage/dressage",
+        "material": "aluminium",
+        "avance_f_mmtr": [
+            0.05,
+            0.15
+        ],
+        "vitesse_coupe_Vc_mmin": [
+            400,
+            1500
+        ],
+        "profondeur_passe_ap_mm": [
+            0.1,
+            2.0
+        ]
+    },
+    "DGCX 11 T3 08-AL H10": {
+        "operation": "profilage",
+        "material": "aluminium",
+        "avance_f_mmtr": [
+            0.1,
+            0.3
+        ],
+        "vitesse_coupe_Vc_mmin": [
+            600,
+            1200
+        ],
+        "profondeur_passe_ap_mm": [
+            0.5,
+            2.0
+        ]
+    },
+    "880-06 04 W06H-P-GM 4344": {
+        "operation": "per\u00e7age",
+        "material": "acier alli\u00e9 4344",
+        "avance_f_mmtr": [
+            0.08,
+            0.25
+        ],
+        "vitesse_coupe_Vc_mmin": [
+            80,
+            180
+        ],
+        "profondeur_passe_ap_mm": [
+            "\u2264 5 \u00d7 D"
+        ]
+    },
+    "CCMT 09 T3 08-UM 1125": {
+        "operation": "al\u00e9sage",
+        "material": "acier/fonte",
+        "avance_f_mmtr": [
+            0.1,
+            0.25
+        ],
+        "vitesse_coupe_Vc_mmin": [
+            150,
+            250
+        ],
+        "profondeur_passe_ap_mm": [
+            1.0,
+            3.0
+        ]
+    },
+    "N123G2-0300-0001-CF 1125": {
+        "operation": "gorge",
+        "material": "acier/fonte",
+        "avance_f_mmtr": [
+            0.05,
+            0.2
+        ],
+        "vitesse_coupe_Vc_mmin": [
+            100,
+            250
+        ],
+        "profondeur_passe_ap_mm": [
+            3.0
+        ]
+    }
+}
