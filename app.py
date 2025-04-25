@@ -8,6 +8,7 @@ import plotly.graph_objects as go
 from datetime import datetime
 from streamlit.runtime.scriptrunner import get_script_run_ctx
 import plotly.express as px
+import re
 
 if get_script_run_ctx() is None:
     print("Erreur : utilisez 'python -m streamlit run app.py'")
@@ -35,21 +36,36 @@ def colored(label, value, unit, warn=False):
     return f"<div style='color:{color}; font-weight:bold'>{label} : {value:.2f} {unit}</div>"
 
 st.set_page_config(page_title="Conditions de coupe", layout="wide")
-st.title("🛠️ Calcul automatique des conditions de coupe")
+st.title(" Calcul automatique des conditions de coupe")
 
-tabs = st.tabs(["🧮 Calcul", "📁 Historique"])
+tabs = st.tabs([" Calcul", " Historique"])
 conditions = load_conditions()
 if "history" not in st.session_state:
     st.session_state.history = []
 
 with tabs[0]:
-    st.sidebar.header("📌 Paramètres machine")
-    max_power = st.sidebar.number_input("🔋 Puissance max (kW)", value=10.5)
-    max_torque = st.sidebar.number_input("🔧 Couple max (Nm)", value=95.0)
-    plaquette_key = st.sidebar.selectbox("🧩 Choisir une plaquette", list(conditions.keys()))
+    st.sidebar.header(" Paramètres machine")
+    max_power = st.sidebar.number_input(" Puissance max (kW)", value=10.5)
+    max_torque = st.sidebar.number_input(" Couple max (Nm)", value=95.0)
+
+    # Sélection de la plaquette
+    plaquette_key = st.sidebar.selectbox(" Choisir une plaquette", list(conditions.keys()))
+
+    # Affichage de l'image correspondant à la plaquette sélectionnée
+    import re
+    image_file = re.sub(r'[^a-zA-Z0-9_-]', '_', plaquette_key) + ".png"
+    image_path = os.path.join("images", image_file)
+
+    if os.path.exists(image_path):
+        st.sidebar.image(image_path, caption=f"Plaquette : {plaquette_key}", use_container_width=True)
+
+    else:
+        st.sidebar.info(" Aucune image disponible pour cette plaquette.")
+
+
     p = conditions[plaquette_key]
 
-    st.subheader(f"📘 Recommandations — {plaquette_key}")
+    st.subheader(f" Recommandations — {plaquette_key}")
     st.markdown(f"- **Opération** : `{p['operation']}`\n- **Matériau** : `{p['material']}`\n- **Avance fn** : `{p['avance_f_mmtr']}`\n- **Vc** : `{p['vitesse_coupe_Vc_mmin']}`\n- **ap** : `{p['profondeur_passe_ap_mm']}`")
 
     col1, col2, col3 = st.columns(3)
@@ -79,7 +95,7 @@ with tabs[0]:
         Pc = power_pc(Fc, Vc)
         Mc = torque_mc(Pc, n)
 
-    st.subheader("📊 Résultats")
+    st.subheader(" Résultats")
     if operation == "perçage":
         st.markdown(colored("n", n, "tr/min"), unsafe_allow_html=True)
         st.markdown(colored("Fₐ (Effort axial)", Fa, "N"), unsafe_allow_html=True)
@@ -106,7 +122,7 @@ with tabs[0]:
         if Mc > max_torque:
             warnings.append("⚠️ Couple trop élevé. Diminuez `Vc`, `fn`, ou `ap`.")
 
-    st.subheader("🧠 Diagnostic de validation des entrées")
+    st.subheader(" Diagnostic de validation des entrées")
     if warnings:
         for msg in warnings:
             st.error(msg)
@@ -178,7 +194,7 @@ with tabs[0]:
     )
 
 with tabs[1]:
-    st.subheader("🕓 Historique des calculs")
+    st.subheader(" Historique des calculs")
     if st.session_state.history:
         df_hist = pd.DataFrame(st.session_state.history)
         st.dataframe(df_hist, use_container_width=True)
@@ -189,7 +205,7 @@ with tabs[1]:
 
         df_filtered['Date_f'] = pd.to_datetime(df_filtered['Date']).dt.strftime("%Y-%m-%d %H:%M:%S")
 
-        st.subheader("📈 Évolution de la puissance et du couple")
+        st.subheader(" Évolution de la puissance et du couple")
         if "Pc (kW)" in df_filtered.columns and "Mc (Nm)" in df_filtered.columns:
             fig_p = px.bar(
                 df_filtered,
@@ -233,7 +249,7 @@ with tabs[1]:
 st.markdown("---")
 st.markdown(
     "<div style='text-align:center; color: grey;'>"
-    "Développé par <b>Mohamed Rhizlane</b> – Arts et Métiers Rabat – Projet RESI 2025"
+    "Usiné par <b>La 36-154, La 128 et La 132, </b> – Arts et Métiers Rabat – Projet RESI 2025"
     "</div>",
     unsafe_allow_html=True
 )
