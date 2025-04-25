@@ -252,3 +252,4 @@ st.markdown(
     "Usiné par <b>La 36-154, La 128 et La 132, </b> – Arts et Métiers Rabat – Projet RESI 2025"
     "</div>",
     unsafe_allow_html=True
+)
