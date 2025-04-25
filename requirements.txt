@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 streamlit
 pandas
 plotly
+=======
+streamlit
+pandas
+plotly
+>>>>>>> 681319ec4cbccdcfb39712e58a283910aa0ec27e
 numpy 
