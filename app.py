@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import streamlit as st 
 import json
 import math
@@ -9,6 +11,27 @@ from datetime import datetime
 from streamlit.runtime.scriptrunner import get_script_run_ctx
 import plotly.express as px
 import re
+
+# 1) configuration de la page — impérativement en tout premier
+st.set_page_config(
+    page_title="Conditions de coupe",
+    page_icon="🔧",
+    layout="wide",
+)
+
+# 2) titre global de l’applications — toujours juste après le set_page_config
+st.title("Calcul automatique des conditions de coupe")
+
+# 3) ton CSS, puis le reste du code…
+st.markdown(
+    """
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+      html, body, [class*="css"] { font-family: 'Roboto', sans-serif !important; }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
 if get_script_run_ctx() is None:
     print("Erreur : utilisez 'python -m streamlit run app.py'")
@@ -35,8 +58,6 @@ def colored(label, value, unit, warn=False):
     color = "red" if warn else "green"
     return f"<div style='color:{color}; font-weight:bold'>{label} : {value:.2f} {unit}</div>"
 
-st.set_page_config(page_title="Conditions de coupe", layout="wide")
-st.title(" Calcul automatique des conditions de coupe")
 
 tabs = st.tabs([" Calcul", " Historique"])
 conditions = load_conditions()
@@ -253,3 +274,4 @@ st.markdown(
     "</div>",
     unsafe_allow_html=True
 )
+
