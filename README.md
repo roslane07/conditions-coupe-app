@@ -25,7 +25,7 @@ projet_resi/
 
 1. Clonez le dépôt :
 ```bash
-git clone [URL_DU_REPO]
+git clone https://github.com/roslane07/conditions-coupe-app
 cd projet_resi
 ```
 
