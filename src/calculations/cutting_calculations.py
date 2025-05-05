@@ -4,7 +4,7 @@ Contains all mathematical formulas and calculations related to cutting operation
 """
 
 import math
-from typing import Tuple, Optional
+from typing import Tuple
 import streamlit as st
 from calculations.cutting_calculations import rotation_speed, coefficient_kc, power_pc, torque_mc, length_la
 
