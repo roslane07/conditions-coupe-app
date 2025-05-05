@@ -1,109 +1,82 @@
-<<<<<<< HEAD
+"""
+Launcher script for the cutting conditions calculator.
+Handles environment setup and application launch.
+"""
+
 import subprocess
 import os
 import sys
 import importlib.util
 from datetime import datetime
+import logging
 
-def log(msg):
+def setup_logging():
+    """Setup logging configuration."""
+    logging.basicConfig(
+        filename="app.log",
+        level=logging.INFO,
+        format="%(asctime)s - %(levelname)s - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S"
+    )
+
+def log_message(level: str, message: str):
+    """
+    Log a message with the specified level.
+    
+    Args:
+        level (str): Log level (info, warning, error)
+        message (str): Message to log
+    """
+    getattr(logging, level)(message)
+    print(f"[{level.upper()}] {message}")
+
+def check_requirements():
+    """Check if all required packages are installed."""
+    required_packages = ["streamlit", "pandas", "plotly", "numpy"]
+    missing_packages = []
+    
+    for package in required_packages:
+        if not importlib.util.find_spec(package):
+            missing_packages.append(package)
+            
+    if missing_packages:
+        log_message("error", f"Missing required packages: {', '.join(missing_packages)}")
+        log_message("info", "Installing missing packages...")
+        try:
+            subprocess.check_call([sys.executable, "-m", "pip", "install"] + missing_packages)
+            log_message("info", "Packages installed successfully")
+        except subprocess.CalledProcessError:
+            log_message("error", "Failed to install packages")
+            sys.exit(1)
+
+def main():
+    """Main launcher function."""
+    setup_logging()
+    log_message("info", "Starting application launcher")
+    
+    # Check project directory
+    project_path = os.path.dirname(os.path.abspath(__file__))
+    if not os.path.exists(os.path.join(project_path, "src", "app.py")):
+        log_message("error", f"Application file not found in: {project_path}")
+        sys.exit(1)
+        
+    # Check requirements
+    check_requirements()
+    
+    # Launch application
     try:
-        with open("log_lancement.txt", "a", encoding="utf-8") as f:
-            f.write(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] {msg}\n")
+        log_message("info", "Launching application...")
+        subprocess.run(
+            [sys.executable, "-m", "streamlit", "run", "src/app.py"],
+            check=True,
+            cwd=project_path
+        )
+    except subprocess.CalledProcessError as e:
+        log_message("error", f"Application failed to start: {str(e)}")
+        sys.exit(1)
     except Exception as e:
-        pass  # Ne pas bloquer le programme à cause du log
+        log_message("error", f"Unexpected error: {str(e)}")
+        sys.exit(1)
 
-def safe_print(msg):
-    try:
-        print(msg)
-    except UnicodeEncodeError:
-        print(msg.encode("ascii", "ignore").decode())  # Supprime les emojis non supportés
-
-# ========== En-tête ==========
-safe_print("============================================")
-safe_print("   LANCEUR AUTOMATIQUE - CONDITIONS DE COUPE")
-safe_print("============================================\n")
-
-# ========== Aller dans le dossier du projet ==========
-project_path = os.path.join(os.path.expanduser("~"), "Downloads", "projet_resi")
-if not os.path.exists(os.path.join(project_path, "app.py")):
-    safe_print(" Fichier app.py introuvable dans :")
-    safe_print("   " + project_path)
-    log("app.py introuvable")
-    sys.exit(1)
-
-os.chdir(project_path)
-
-# ========== Vérifier si streamlit est installé ==========
-def is_installed(pkg):
-    return importlib.util.find_spec(pkg) is not None
-
-if not is_installed("streamlit"):
-    safe_print(" Le module 'streamlit' n'est pas installé.")
-    safe_print(" Installez-le avec : pip install streamlit --user")
-    log("streamlit non installé")
-    sys.exit(1)
-
-# ========== Lancer Streamlit ==========
-try:
-    safe_print(" Lancement de l'application...")
-    log("Lancement de l'application Streamlit")
-    subprocess.run([sys.executable, "-m", "streamlit", "run", "app.py"], check=True)
-except Exception as e:
-    safe_print(" Erreur lors du lancement :")
-    safe_print(str(e))
-    log("Erreur lors du lancement : " + str(e))
-=======
-import subprocess
-import os
-import sys
-import importlib.util
-from datetime import datetime
-
-def log(msg):
-    try:
-        with open("log_lancement.txt", "a", encoding="utf-8") as f:
-            f.write(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] {msg}\n")
-    except Exception as e:
-        pass  # Ne pas bloquer le programme à cause du log
-
-def safe_print(msg):
-    try:
-        print(msg)
-    except UnicodeEncodeError:
-        print(msg.encode("ascii", "ignore").decode())  # Supprime les emojis non supportés
-
-# ========== En-tête ==========
-safe_print("============================================")
-safe_print("   LANCEUR AUTOMATIQUE - CONDITIONS DE COUPE")
-safe_print("============================================\n")
-
-# ========== Aller dans le dossier du projet ==========
-project_path = os.path.join(os.path.expanduser("~"), "Downloads", "projet_resi")
-if not os.path.exists(os.path.join(project_path, "app.py")):
-    safe_print(" Fichier app.py introuvable dans :")
-    safe_print("   " + project_path)
-    log("app.py introuvable")
-    sys.exit(1)
-
-os.chdir(project_path)
-
-# ========== Vérifier si streamlit est installé ==========
-def is_installed(pkg):
-    return importlib.util.find_spec(pkg) is not None
-
-if not is_installed("streamlit"):
-    safe_print(" Le module 'streamlit' n'est pas installé.")
-    safe_print(" Installez-le avec : pip install streamlit --user")
-    log("streamlit non installé")
-    sys.exit(1)
-
-# ========== Lancer Streamlit ==========
-try:
-    safe_print(" Lancement de l'application...")
-    log("Lancement de l'application Streamlit")
-    subprocess.run([sys.executable, "-m", "streamlit", "run", "app.py"], check=True)
-except Exception as e:
-    safe_print(" Erreur lors du lancement :")
-    safe_print(str(e))
-    log("Erreur lors du lancement : " + str(e))
->>>>>>> 681319ec4cbccdcfb39712e58a283910aa0ec27e
+if __name__ == "__main__":
+    main()
